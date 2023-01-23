@@ -1,0 +1,889 @@
+{
+
+    "AWSTemplateFormatVersion": "2010-09-09",
+
+    "Description": "Trying to help john realize the ntier architecture",
+
+    "Parameters": {
+
+        "VpcName": {
+
+            "Description": "Enter the new name of vpc",
+
+            "Type": "String",
+
+            "Default": "DevCF"
+
+        },
+
+        "vpcCidrName": {
+
+            "Description": "Enter the vpc cidrBlock",
+
+            "Type": "String",
+
+            "Default": "10.0.0.0/16"
+
+        },
+
+        "webSubnetCidr": {
+
+            "Description": "Enter websubnet cidr block",
+
+            "Type": "String",
+
+            "Default": "10.0.0.0/24"
+
+        },
+
+        "appsubnetcidr": {
+
+            "Description": "Enter the app subnet cidr",
+
+            "Type": "String",
+
+            "Default": "10.0.1.0/24"
+
+        },
+
+        "DbsubnetCidr": {
+
+            "Description": "Enter the cidr for Database",
+
+            "Type": "String",
+
+            "Default": "10.0.2.0/24"
+
+        },
+
+        "websubnetAZ": {
+
+            "Description": "Select region for websubnet",
+
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+
+        },
+
+        "appsubnetAZ": {
+
+            "Description": "Select region for app subnet",
+
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+
+        },
+
+        "DbsubnetAZ": {
+
+            "Description": "Select region for DBsubnet",
+
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+
+        },
+
+        "websubnet2AZ": {
+
+            "Description": "Select region for wsbsubnet2",
+
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+
+        },
+
+        "websubnet2cidr": {
+
+            "Description": "Enter the cidr for websubnet2",
+
+            "Type": "String",
+
+            "Default": "10.0.3.0/24"
+
+        },
+
+        "appsubnet2AZ": {
+
+            "Description": "Select the region for appsubnet2",
+
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+
+        },
+
+        "appsubnet2cidr": {
+
+            "Description": "Enter the cidre for appsubnet2",
+
+            "Type": "String",
+
+            "Default": "10.0.4.0/24"
+
+        },
+
+        "Dbsubnet2AZ": {
+
+            "Description": "Select the region for app subnet2",
+
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+
+        },
+
+        "Dbsubnet2cidr": {
+
+            "Description": "Enter the cidr for DBsubnet2",
+
+            "Type": "String",
+
+            "Default": "10.0.5.0/24"
+
+        }
+
+    },
+
+    "Resources": {
+
+        "ntierVPC": {
+
+            "Type": "AWS::EC2::VPC",
+
+            "Properties": {
+
+                "CidrBlock": {
+
+                    "Ref": "vpcCidrName"
+
+                },
+
+                "EnableDnsHostnames": true,
+
+                "EnableDnsSupport": true,
+
+                "InstanceTenancy": "default",
+
+                "Tags": [
+
+                    {
+
+                        "Key": "Name",
+
+                        "Value": {
+
+                            "Ref": "VpcName"
+
+                        }
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        "WebSubnet": {
+
+            "Type": "AWS::EC2::Subnet",
+
+            "Properties": {
+
+                "AvailabilityZone": {
+
+                    "Ref": "websubnetAZ"
+
+                },
+
+                "VpcId": {
+
+                    "Ref": "ntierVPC"
+
+                },
+
+                "CidrBlock": {
+
+                    "Ref": "webSubnetCidr"
+
+                },
+
+                "Tags": [
+
+                    {
+
+                        "Key": "Name",
+
+                        "Value": "publicSubnet1"
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        "AppSubnet": {
+
+            "Type": "AWS::EC2::Subnet",
+
+            "Properties": {
+
+                "AvailabilityZone": {
+
+                    "Ref": "appsubnetAZ"
+
+                },
+
+                "VpcId": {
+
+                    "Ref": "ntierVPC"
+
+                },
+
+                "CidrBlock": {
+
+                    "Ref": "appsubnetcidr"
+
+                },
+
+                "Tags": [
+
+                    {
+
+                        "Key": "Name",
+
+                        "Value": "AppPrivateSubnet1"
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        "DbSubnet": {
+
+            "Type": "AWS::EC2::Subnet",
+
+            "Properties": {
+
+                "AvailabilityZone": {
+
+                    "Ref": "DbsubnetAZ"
+
+                },
+
+                "VpcId": {
+
+                    "Ref": "ntierVPC"
+
+                },
+
+                "CidrBlock": {
+
+                    "Ref": "DbsubnetCidr"
+
+                },
+
+                "Tags": [
+
+                    {
+
+                        "Key": "Name",
+
+                        "Value": "DbPrivateSubnet1"
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        "websubnet2": {
+
+            "Type": "AWS::EC2::Subnet",
+
+            "Properties": {
+
+                "AvailabilityZone": {
+
+                    "Ref": "websubnet2AZ"
+
+                },
+
+                "VpcId": {
+
+                    "Ref": "ntierVPC"
+
+                },
+
+                "CidrBlock": {
+
+                    "Ref": "websubnet2cidr"
+
+                },
+
+                "Tags": [
+
+                    {
+
+                        "Key": "Name",
+
+                        "Value": "pubsubnet2"
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        "appsubnet2": {
+
+            "Type": "AWS::EC2::Subnet",
+
+            "Properties": {
+
+                "AvailabilityZone": {
+
+                    "Ref": "appsubnet2AZ"
+
+                },
+
+                "VpcId": {
+
+                    "Ref": "ntierVPC"
+
+                },
+
+                "CidrBlock": {
+
+                    "Ref": "appsubnet2cidr"
+
+                },
+
+                "Tags": [
+
+                    {
+
+                        "Key": "Name",
+
+                        "Value": "AppPrivatesubnet2"
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        "dbsubnet2": {
+
+            "Type": "AWS::EC2::Subnet",
+
+            "Properties": {
+
+                "AvailabilityZone": {
+
+                    "Ref": "Dbsubnet2AZ"
+
+                },
+
+                "VpcId": {
+
+                    "Ref": "ntierVPC"
+
+                },
+
+                "CidrBlock": {
+
+                    "Ref": "Dbsubnet2cidr"
+
+                },
+
+                "Tags": [
+
+                    {
+
+                        "Key": "Name",
+
+                        "Value": "dbPrivateSubnet2"
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        "myInternetGW": {
+
+            "Type": "AWS::EC2::InternetGateway",
+
+            "Properties": {
+
+                "Tags": [
+
+                    {
+
+                        "Key": "Name",
+
+                        "Value": "Myinternetgateway"
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        "AttachGateway": {
+
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+
+            "Properties": {
+
+                "VpcId": {
+
+                    "Ref": "ntierVPC"
+
+                },
+
+                "InternetGatewayId": {
+
+                    "Ref": "myInternetGW"
+
+                }
+
+            }
+
+        },
+
+        "WebRouteTable": {
+
+            "Type": "AWS::EC2::RouteTable",
+
+            "Properties": {
+
+                "VpcId": {
+
+                    "Ref": "ntierVPC"
+
+                },
+
+                "Tags": [
+
+                    {
+
+                        "Key": "Name",
+
+                        "Value": "publicRT1"
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        "routeName": {
+
+            "Type": "AWS::EC2::Route",
+
+            "Properties": {
+
+                "RouteTableId": {
+
+                    "Ref": "WebRouteTable"
+
+                },
+
+                "DestinationCidrBlock": "0.0.0.0/0",
+
+                "GatewayId": {
+
+                    "Ref": "myInternetGW"
+
+                }
+
+            }
+
+        },
+
+        "WebRouteTable2": {
+
+            "Type": "AWS::EC2::RouteTable",
+
+            "Properties": {
+
+                "VpcId": {
+
+                    "Ref": "ntierVPC"
+
+                },
+
+                "Tags": [
+
+                    {
+
+                        "Key": "Name",
+
+                        "Value": "publicRT2"
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        "routeName2": {
+
+            "Type": "AWS::EC2::Route",
+
+            "Properties": {
+
+                "RouteTableId": {
+
+                    "Ref": "WebRouteTable2"
+
+                },
+
+                "DestinationCidrBlock": "0.0.0.0/0",
+
+                "GatewayId": {
+
+                    "Ref": "myInternetGW"
+
+                }
+
+            }
+
+        },
+
+        "PrivateRouteTable": {
+
+            "Type": "AWS::EC2::RouteTable",
+
+            "Properties": {
+
+                "VpcId": {
+
+                    "Ref": "ntierVPC"
+
+                },
+
+                "Tags": [
+
+                    {
+
+                        "Key": "Name",
+
+                        "Value": "InternetGW"
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        "privaterouteName1": {
+
+            "Type": "AWS::EC2::Route",
+
+            "Properties": {
+
+                "RouteTableId": {
+
+                    "Ref": "PrivateRouteTable"
+
+                },
+
+                "DestinationCidrBlock": "0.0.0.0/0",
+
+                "GatewayId": {
+
+                    "Ref": "NATGateway"
+
+                }
+
+            }
+
+        },
+
+        "PrivateRouteTable2": {
+
+            "Type": "AWS::EC2::RouteTable",
+
+            "Properties": {
+
+                "VpcId": {
+
+                    "Ref": "ntierVPC"
+
+                },
+
+                "Tags": [
+
+                    {
+
+                        "Key": "Name",
+
+                        "Value": "PrvtRT2"
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        "privaterouteName2": {
+
+            "Type": "AWS::EC2::Route",
+
+            "Properties": {
+
+                "RouteTableId": {
+
+                    "Ref": "PrivateRouteTable2"
+
+                },
+
+                "DestinationCidrBlock": "0.0.0.0/0",
+
+                "GatewayId": {
+
+                    "Ref": "NATGateway2"
+
+                }
+
+            }
+
+        },
+
+        "routeTableAssocPublic1": {
+
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+
+            "Properties": {
+
+                "SubnetId": {
+
+                    "Ref": "WebSubnet"
+
+                },
+
+                "RouteTableId": {
+
+                    "Ref": "WebRouteTable"
+
+                }
+
+            }
+
+        },
+
+        "routeTableAssocpublic2": {
+
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+
+            "Properties": {
+
+                "SubnetId": {
+
+                    "Ref": "websubnet2"
+
+                },
+
+                "RouteTableId": {
+
+                    "Ref": "WebRouteTable2"
+
+                }
+
+            }
+
+        },
+
+        "NategatewayEIP1": {
+
+            "Type": "AWS::EC2::EIP",
+
+            "Properties": {
+
+                "Domain": "vpc",
+
+                "Tags": [
+
+                    {
+
+                        "Key": "Name",
+
+                        "Value": "APPEIP1"
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        "NategatewayEIP2": {
+
+            "Type": "AWS::EC2::EIP",
+
+            "Properties": {
+
+                "Domain": "vpc",
+
+                "Tags": [
+
+                    {
+
+                        "Key": "Name",
+
+                        "Value": "APPEIP2"
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        "NATGateway": {
+
+            "Type": "AWS::EC2::NatGateway",
+
+            "Properties": {
+
+                "AllocationId": {
+
+                    "Fn::GetAtt": [
+
+                        "NategatewayEIP1",
+
+                        "AllocationId"
+
+                    ]
+
+                },
+
+                "SubnetId": {
+
+                    "Ref": "WebSubnet"
+
+                },
+
+                "Tags": [
+
+                    {
+
+                        "Key": "Name",
+
+                        "Value": "APPprivateNGW1"
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        "NATGateway2": {
+
+            "Type": "AWS::EC2::NatGateway",
+
+            "Properties": {
+
+                "AllocationId": {
+
+                    "Fn::GetAtt": [
+
+                        "NategatewayEIP2",
+
+                        "AllocationId"
+
+                    ]
+
+                },
+
+                "SubnetId": {
+
+                    "Ref": "websubnet2"
+
+                },
+
+                "Tags": [
+
+                    {
+
+                        "Key": "Name",
+
+                        "Value": "APPprivateNGW2"
+
+                    }
+
+                ]
+
+            }
+
+        },
+
+        "routeTableAssocapp1": {
+
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+
+            "Properties": {
+
+                "SubnetId": {
+
+                    "Ref": "AppSubnet"
+
+                },
+
+                "RouteTableId": {
+
+                    "Ref": "PrivateRouteTable"
+
+                }
+
+            }
+
+        },
+
+        "routeTableAssocapp2": {
+
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+
+            "Properties": {
+
+                "SubnetId": {
+
+                    "Ref": "appsubnet2"
+
+                },
+
+                "RouteTableId": {
+
+                    "Ref": "PrivateRouteTable2"
+
+                }
+
+            }
+
+        }
+
+    }
+
+}
